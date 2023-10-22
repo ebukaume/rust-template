@@ -28,9 +28,9 @@ pub struct TodoModel {
     subject: String,
     description: String,
     is_done: bool,
-    due_date: String,
-    created_at: String,
-    updated_at: String,
+    due_date: DateTime<Utc>,
+    created_at: DateTime<Utc>,
+    updated_at: DateTime<Utc>,
 }
 
 impl From<TodoModel> for Todo {
@@ -47,36 +47,9 @@ impl From<TodoModel> for Todo {
             subject: value.subject,
             description: value.description,
             is_done: value.is_done,
-            due_date: value
-                .due_date
-                .parse()
-                .map_err(|_| {
-                    ApplicationError::ServerError(vec![
-                        String::from("Error parsing model ID"),
-                        value.due_date,
-                    ])
-                })
-                .unwrap(),
-            created_at: value
-                .created_at
-                .parse()
-                .map_err(|_| {
-                    ApplicationError::ServerError(vec![
-                        String::from("Error parsing model ID"),
-                        value.created_at,
-                    ])
-                })
-                .unwrap(),
-            updated_at: value
-                .updated_at
-                .parse()
-                .map_err(|_| {
-                    ApplicationError::ServerError(vec![
-                        String::from("Error parsing model ID"),
-                        value.updated_at,
-                    ])
-                })
-                .unwrap(),
+            due_date: value.due_date,
+            created_at: value.created_at,
+            updated_at: value.updated_at,
         }
     }
 }
