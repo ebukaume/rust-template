@@ -1,0 +1,5 @@
+/api/target
+/migration/target
+/seed/target
+/target
+.env
