@@ -11,11 +11,16 @@ async fn main() {
         .await
         .expect(&format!("Unable to connect to DB!"));
 
-    create_todo_table(&database_driver).await.unwrap();
-    create_todo_index(&database_driver).await.unwrap();
+    if let Err(err) = create_todo_table(&database_driver).await {
+        println!("{}", err);
+    }
+
+    if let Err(err) = create_todo_index(&database_driver).await {
+        println!("{}", err);
+    }
 }
 
-async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), ()> {
+async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), String> {
     let todo_table = r#"
     DEFINE TABLE todo SCHEMAFULL;
 
@@ -27,18 +32,26 @@ async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), ()> {
     DEFINE FIELD updated_at ON todo TYPE datetime;
     "#;
 
-    database_driver.client.query(todo_table).await.unwrap();
+    database_driver
+        .client
+        .query(todo_table)
+        .await
+        .map_err(|e| e.to_string())?;
 
     Ok(())
 }
 
-async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), ()> {
+async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), String> {
     let todo_table = r#"
     DEFINE INDEX todoSearchIndex ON TABLE todo COLUMNS subject SEARCH ANALYZER ascii BM25;
     DEFINE ANALYZER english TOKENIZERS class FILTERS snowball(english);
     "#;
 
-    database_driver.client.query(todo_table).await.unwrap();
+    database_driver
+        .client
+        .query(todo_table)
+        .await
+        .map_err(|e| e.to_string())?;
 
     Ok(())
 }
