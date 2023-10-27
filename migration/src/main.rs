@@ -24,12 +24,19 @@ async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), Strin
     let todo_table = r#"
     DEFINE TABLE todo SCHEMAFULL;
 
+    DEFINE FIELD id ON todo TYPE record;// DEFAULT rand::ulid();
     DEFINE FIELD subject ON todo TYPE string;
     DEFINE FIELD description ON todo TYPE string;
     DEFINE FIELD due_date ON todo TYPE datetime;
-    DEFINE FIELD is_done ON todo TYPE bool;
+    DEFINE FIELD is_done ON todo TYPE bool DEFAULT false;
     DEFINE FIELD created_at ON todo TYPE datetime;
-    DEFINE FIELD updated_at ON todo TYPE datetime;
+    DEFINE FIELD updated_at ON todo TYPE datetime VALUE (
+        IF $value < time::now() THEN
+            time::now()
+        ELSE
+            $value
+        END
+    );
     "#;
 
     database_driver
@@ -43,8 +50,15 @@ async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), Strin
 
 async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), String> {
     let todo_table = r#"
-    DEFINE INDEX todoSearchIndex ON TABLE todo COLUMNS subject SEARCH ANALYZER ascii BM25;
+    // DEFINE INDEX todoSearchIndex ON TABLE todo COLUMNS subject SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
+    // DEFINE ANALYZER english TOKENIZERS class FILTERS snowball(english);
     DEFINE ANALYZER english TOKENIZERS class FILTERS snowball(english);
+    DEFINE INDEX todo_index
+        ON todo FIELDS subject
+        SEARCH
+        ANALYZER english
+        BM25(1.2, 0.75)
+        HIGHLIGHTS
     "#;
 
     database_driver

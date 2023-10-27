@@ -1,6 +1,7 @@
 use crate::{common::ApplicationError, resource::TodoRepository, util::validate_ulid};
 
-use super::{CreateTodoRequest, Todo, TodoRepositoryImpl, UpdateTodoRequest};
+use super::{CreateTodoRequest, Todo, TodoRepositoryImpl};
+use api_documentation::entities::todo::request::UpdateTodoRequest;
 
 type ServeiceResult<T> = Result<T, ApplicationError>;
 
@@ -33,7 +34,7 @@ impl TodoService<TodoRepositoryImpl> {
     pub async fn create_todo(&self, todo: CreateTodoRequest) -> ServeiceResult<Todo> {
         let todo = Todo::from_request(todo);
 
-        self.repository.create_todo(&todo).await?;
+        let todo = self.repository.create_todo(todo).await?;
 
         Ok(todo)
     }
@@ -41,10 +42,7 @@ impl TodoService<TodoRepositoryImpl> {
     pub async fn update_todo(&self, id: String, update: UpdateTodoRequest) -> ServeiceResult<Todo> {
         let id = validate_ulid(id)?;
 
-        let todo = self.repository.get_todo_by_id(&id).await?;
-        let updated_todo = update.merge(todo);
-
-        let todo = self.repository.update_todo(&id, updated_todo).await?;
+        let todo = self.repository.update_todo(&id, update.into()).await?;
 
         Ok(todo)
     }

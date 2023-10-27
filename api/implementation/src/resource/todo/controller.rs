@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use api_documentation::entities::request::UpdateTodoRequest;
 use axum::{
     extract::{Path, State},
     routing, Json, Router,
@@ -11,7 +12,7 @@ use crate::{
     resource::{TodoResponse, TodoService},
 };
 
-use super::{CreateTodoRequest, SearchTodo, TodoRepositoryImpl, UpdateTodoRequest};
+use super::{CreateTodoRequest, SearchTodo, TodoRepositoryImpl};
 
 pub struct TodoController {
     prefix: Option<String>,

@@ -73,25 +73,25 @@ impl IntoResponse for ApplicationError {
 
 impl From<FormRejection> for ApplicationError {
     fn from(value: FormRejection) -> Self {
-        Self::ValidationError(vec![value.to_string()])
+        Self::ValidationError(vec![value.body_text()])
     }
 }
 
 impl From<PathRejection> for ApplicationError {
     fn from(value: PathRejection) -> Self {
-        Self::ValidationError(vec![value.to_string()])
+        Self::ValidationError(vec![value.body_text()])
     }
 }
 
 impl From<QueryRejection> for ApplicationError {
     fn from(value: QueryRejection) -> Self {
-        Self::ValidationError(vec![value.to_string()])
+        Self::ValidationError(vec![value.body_text()])
     }
 }
 
 impl From<JsonRejection> for ApplicationError {
     fn from(value: JsonRejection) -> Self {
-        Self::ValidationError(vec![value.to_string()])
+        Self::ValidationError(vec![value.body_text()])
     }
 }
 

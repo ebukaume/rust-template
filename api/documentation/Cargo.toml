@@ -1,0 +1,15 @@
+[package]
+name = "api_documentation"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ebuka Umeokonkwo"]
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = "0.4.31"
+serde = "1.0.190"
+surrealdb = "1.0.0"
+ulid = "1.1.0"
+validator = "0.16.1"

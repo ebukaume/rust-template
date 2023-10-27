@@ -54,13 +54,14 @@ impl From<TodoModel> for Todo {
     }
 }
 
-#[derive(Deserialize, Validate)]
+#[derive(Serialize, Deserialize, Validate)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateTodoRequest {
     #[validate(length(min = 1))]
-    subject: String,
+    pub subject: String,
     #[validate(length(min = 1))]
-    description: String,
-    due_date: DateTime<Utc>,
+    pub description: String,
+    pub due_date: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Serialize, Validate, Debug)]
@@ -84,7 +85,7 @@ pub struct TodoResponse {
 
 #[derive(Deserialize, Validate)]
 pub struct SearchTodo {
-    #[validate(length(min = 1))]
+    #[validate(length(min = 1, message = "is required!"))]
     pub q: String,
 }
 
@@ -121,16 +122,5 @@ impl Todo {
             created_at: creation_date,
             updated_at: creation_date,
         }
-    }
-}
-
-impl UpdateTodoRequest {
-    pub fn merge(mut self, original: Todo) -> Self {
-        self.subject = self.subject.or(Some(original.subject));
-        self.description = self.description.or(Some(original.description));
-        self.due_date = self.due_date.or(Some(original.due_date));
-        self.is_done = self.is_done.or(Some(original.is_done));
-
-        self
     }
 }
