@@ -15,6 +15,8 @@ use crate::{
 
 use super::TodoRepositoryImpl;
 
+pub static TODO_TAG: &str = "Todo";
+
 pub struct TodoController {
     prefix: Option<String>,
     service: Option<TodoService<TodoRepositoryImpl>>,
@@ -57,7 +59,17 @@ impl TodoController {
     }
 }
 
-async fn get_todos(
+#[utoipa::path(
+    get,
+    path = "/todo",
+    responses(
+        (status = StatusCode::OK, description = "Get all Todos", body = [TodoResponse]),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn get_todos(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {
     let todos = service.get_todos().await?;
@@ -67,7 +79,18 @@ async fn get_todos(
     Ok(Json(result))
 }
 
-async fn get_todo_by_id(
+#[utoipa::path(
+    get,
+    path = "/todo/{id}",
+    params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
+    responses(
+        (status = StatusCode::OK, description = "Get Todo by Id", body = TodoResponse),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn get_todo_by_id(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
@@ -76,7 +99,18 @@ async fn get_todo_by_id(
     Ok(todo.into())
 }
 
-async fn create_todo(
+#[utoipa::path(
+    post,
+    path = "/todo",
+    request_body = CreateTodoRequest,
+    responses(
+        (status = StatusCode::OK, description = "Create Todos", body = TodoResponse),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn create_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     ValidatedBody(data): ValidatedBody<CreateTodoRequest>,
 ) -> Result<TodoResponse, ApplicationError> {
@@ -85,7 +119,18 @@ async fn create_todo(
     Ok(todo.into())
 }
 
-async fn delete_todo(
+#[utoipa::path(
+    delete,
+    path = "/todo{id}",
+    params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
+    responses(
+        (status = StatusCode::OK, description = "Delete Todo by Id", body = TodoResponse),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn delete_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
@@ -94,7 +139,18 @@ async fn delete_todo(
     Ok(todo.into())
 }
 
-async fn update_todo(
+#[utoipa::path(
+    patch,
+    path = "/todo/{id}",
+    params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
+    responses(
+        (status = StatusCode::OK, description = "Update a Todo", body = TodoResponse),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn update_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
     ValidatedBody(update_data): ValidatedBody<UpdateTodoRequest>,
@@ -104,7 +160,18 @@ async fn update_todo(
     Ok(todo.into())
 }
 
-async fn search_todo(
+#[utoipa::path(
+    get,
+    path = "/todo/search",
+    params(SearchTodoRequest),
+    responses(
+        (status = StatusCode::OK, description = "Search for Todos based on subject adn description fields", body = [TodoResponse]),
+        (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
+        (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error", body = Problem),
+    ),
+    tag = TODO_TAG
+)]
+pub async fn search_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     ValidatedQuery(SearchTodoRequest { q }): ValidatedQuery<SearchTodoRequest>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {

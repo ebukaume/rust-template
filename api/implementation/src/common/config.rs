@@ -8,6 +8,12 @@ pub enum Environment {
 }
 
 #[derive(Debug)]
+pub struct Application {
+    pub name: String,
+    pub version: String,
+}
+
+#[derive(Debug)]
 pub struct Config {
     pub env: Environment,
     pub port: u16,
@@ -16,6 +22,8 @@ pub struct Config {
     pub db_name: String,
     pub db_username: String,
     pub db_password: String,
+
+    pub app: Application,
 }
 
 static MESSAGE_PREFIX: &str = "is required env variable!";
@@ -23,6 +31,10 @@ static MESSAGE_PREFIX: &str = "is required env variable!";
 impl Config {
     pub fn new() -> Self {
         dotenv::dotenv().ok();
+        let app = Application {
+            name: env::var("APP_NAME").expect(&error_message("APP_NAME")),
+            version: env::var("APP_VERSION").expect(&error_message("APP_VERSION")),
+        };
         Self {
             port: env::var("PORT")
                 .unwrap_or("4242".into())
@@ -41,6 +53,7 @@ impl Config {
                 .expect(&error_message("SURREALDB_USERNAME")),
             db_password: env::var("SURREALDB_PASSWORD")
                 .expect(&error_message("SURREALDB_PASSWORD")),
+            app,
         }
     }
 }

@@ -9,12 +9,13 @@ use axum::{
 use serde::Serialize;
 use surrealdb::Error as SurrealDBError;
 use tracing::{error, warn};
+use utoipa::ToSchema;
 use validator::ValidationErrors;
 
 use crate::util::ValidationError;
 
-#[derive(Serialize, Debug)]
-struct Problem<'a> {
+#[derive(Serialize, Debug, ToSchema)]
+pub struct Problem<'a> {
     pub code: &'a str,
     pub issues: Vec<String>,
 }
@@ -85,7 +86,6 @@ impl From<PathRejection> for ApplicationError {
 
 impl From<QueryRejection> for ApplicationError {
     fn from(value: QueryRejection) -> Self {
-        println!("{:?}", &value);
         Self::ValidationError(vec![value.body_text()])
     }
 }

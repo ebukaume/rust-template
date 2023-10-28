@@ -4,10 +4,15 @@ use axum::{http::Uri, Router, Server};
 use resource::health::controller::HealthController;
 
 use tracing::info;
+use utoipa::OpenApi;
+use utoipa_rapidoc::RapiDoc;
 
 use crate::{
     common::{Config, Constant, DatabaseDriver},
-    resource::{HealthRepository, HealthService, TodoController, TodoRepositoryImpl, TodoService},
+    resource::{
+        doc::ApiDoc, HealthRepository, HealthService, TodoController, TodoRepositoryImpl,
+        TodoService,
+    },
     util::Tracing,
 };
 
@@ -44,6 +49,7 @@ async fn main() {
     let app = Router::new()
         .merge(health_controller)
         .merge(todo_controller)
+        .merge(RapiDoc::with_openapi("/docs.json", ApiDoc::openapi()).path("/docs"))
         .layer(tracing)
         .fallback(fallback);
 
