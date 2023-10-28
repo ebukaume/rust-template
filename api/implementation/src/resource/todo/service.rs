@@ -23,7 +23,7 @@ impl TodoService<TodoRepositoryImpl> {
         Ok(todos)
     }
 
-    pub async fn get_todo_by_id(&self, id: String) -> ServeiceResult<Todo> {
+    pub async fn get_todo_by_id(&self, id: &str) -> ServeiceResult<Todo> {
         let id = validate_ulid(id)?;
 
         let todo = self.repository.get_todo_by_id(&id).await?;
@@ -39,7 +39,7 @@ impl TodoService<TodoRepositoryImpl> {
         Ok(todo)
     }
 
-    pub async fn update_todo(&self, id: String, update: UpdateTodoRequest) -> ServeiceResult<Todo> {
+    pub async fn update_todo(&self, id: &str, update: UpdateTodoRequest) -> ServeiceResult<Todo> {
         let id = validate_ulid(id)?;
         let existing_todo = self.repository.get_todo_by_id(&id).await?;
         let updated_todo = TodoModelUpdate::merge(existing_todo, update);
@@ -49,7 +49,7 @@ impl TodoService<TodoRepositoryImpl> {
         Ok(todo)
     }
 
-    pub async fn delete_todo(&self, id: String) -> ServeiceResult<Todo> {
+    pub async fn delete_todo(&self, id: &str) -> ServeiceResult<Todo> {
         let id = validate_ulid(id)?;
 
         let todo = self.repository.delete_todo(&id).await?;
@@ -57,8 +57,8 @@ impl TodoService<TodoRepositoryImpl> {
         Ok(todo)
     }
 
-    pub async fn search_todo(&self, q: String) -> ServeiceResult<Vec<Todo>> {
-        let todo = self.repository.search_todo(&q).await?;
+    pub async fn search_todo(&self, q: &str) -> ServeiceResult<Vec<Todo>> {
+        let todo = self.repository.search_todo(q).await?;
 
         Ok(todo)
     }

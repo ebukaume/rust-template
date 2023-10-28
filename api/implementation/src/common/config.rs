@@ -1,5 +1,12 @@
 use std::env;
 
+#[derive(PartialEq, Debug)]
+pub enum Environment {
+    Production,
+    Development,
+    Test,
+}
+
 #[derive(Debug)]
 pub struct Config {
     pub env: Environment,
@@ -9,13 +16,6 @@ pub struct Config {
     pub db_name: String,
     pub db_username: String,
     pub db_password: String,
-}
-
-#[derive(PartialEq, Debug)]
-pub enum Environment {
-    Production,
-    Development,
-    Test,
 }
 
 static MESSAGE_PREFIX: &str = "is required env variable!";

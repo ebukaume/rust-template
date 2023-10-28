@@ -6,10 +6,10 @@ pub enum ValidationError {
 
 type ValidationResult<T> = Result<T, ValidationError>;
 
-pub fn validate_ulid(id: String) -> ValidationResult<Ulid> {
+pub fn validate_ulid(id: &str) -> ValidationResult<Ulid> {
     if let Ok(ulid) = Ulid::from_string(&id) {
         return Ok(ulid);
     }
 
-    return Err(ValidationError::InvalidUlid(id));
+    return Err(ValidationError::InvalidUlid(id.to_string()));
 }

@@ -71,7 +71,7 @@ async fn get_todo_by_id(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.get_todo_by_id(todo_id).await?;
+    let todo = service.get_todo_by_id(&todo_id).await?;
 
     Ok(todo.into())
 }
@@ -89,7 +89,7 @@ async fn delete_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.delete_todo(todo_id).await?;
+    let todo = service.delete_todo(&todo_id).await?;
 
     Ok(todo.into())
 }
@@ -99,16 +99,16 @@ async fn update_todo(
     Path(todo_id): Path<String>,
     ValidatedBody(update_data): ValidatedBody<UpdateTodoRequest>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.update_todo(todo_id, update_data).await?;
+    let todo = service.update_todo(&todo_id, update_data).await?;
 
     Ok(todo.into())
 }
 
 async fn search_todo(
     State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
-    ValidatedQuery(query): ValidatedQuery<SearchTodoRequest>,
+    ValidatedQuery(SearchTodoRequest { q }): ValidatedQuery<SearchTodoRequest>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {
-    let todos = service.search_todo(query.q).await?;
+    let todos = service.search_todo(&q).await?;
 
     let result: Vec<TodoResponse> = todos.into_iter().map(|t| t.into()).collect();
 
