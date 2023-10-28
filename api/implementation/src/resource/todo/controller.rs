@@ -7,7 +7,6 @@ use axum::{
     extract::{Path, State},
     routing, Json, Router,
 };
-use tokio::sync::Mutex;
 
 use crate::{
     common::{ApplicationError, ValidatedBody, ValidatedQuery},
@@ -43,7 +42,7 @@ impl TodoController {
 
     pub fn build(self) -> Router {
         let prefix = self.prefix.expect("prefix not set");
-        let service = Arc::new(Mutex::new(self.service.expect("service not set")));
+        let service = Arc::new(self.service.expect("service not set"));
 
         let router = Router::new()
             .route("/", routing::get(get_todos))
@@ -59,9 +58,9 @@ impl TodoController {
 }
 
 async fn get_todos(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {
-    let todos = service.lock().await.get_todos().await?;
+    let todos = service.get_todos().await?;
 
     let result: Vec<TodoResponse> = todos.into_iter().map(|t| t.into()).collect();
 
@@ -69,51 +68,47 @@ async fn get_todos(
 }
 
 async fn get_todo_by_id(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.lock().await.get_todo_by_id(todo_id).await?;
+    let todo = service.get_todo_by_id(todo_id).await?;
 
     Ok(todo.into())
 }
 
 async fn create_todo(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     ValidatedBody(data): ValidatedBody<CreateTodoRequest>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.lock().await.create_todo(data).await?;
+    let todo = service.create_todo(data).await?;
 
     Ok(todo.into())
 }
 
 async fn delete_todo(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.lock().await.delete_todo(todo_id).await?;
+    let todo = service.delete_todo(todo_id).await?;
 
     Ok(todo.into())
 }
 
 async fn update_todo(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     Path(todo_id): Path<String>,
     ValidatedBody(update_data): ValidatedBody<UpdateTodoRequest>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service
-        .lock()
-        .await
-        .update_todo(todo_id, update_data)
-        .await?;
+    let todo = service.update_todo(todo_id, update_data).await?;
 
     Ok(todo.into())
 }
 
 async fn search_todo(
-    State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
+    State(service): State<Arc<TodoService<TodoRepositoryImpl>>>,
     ValidatedQuery(query): ValidatedQuery<SearchTodoRequest>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {
-    let todos = service.lock().await.search_todo(query.q).await?;
+    let todos = service.search_todo(query.q).await?;
 
     let result: Vec<TodoResponse> = todos.into_iter().map(|t| t.into()).collect();
 

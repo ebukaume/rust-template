@@ -5,6 +5,5 @@
 - Consider integrating https://github.com/marketplace/actions/surrealdb-migrations
 - Use faker to seed database
 - Add clippy to deps
-- Use RwLock in place or Arc
 - Use Cow where possible
 - Add system telemetry

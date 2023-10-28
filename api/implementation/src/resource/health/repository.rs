@@ -1,9 +1,8 @@
-use std::sync::Arc;
-
 use crate::common::{DatabaseDriver, RepositoryError};
 
+#[derive(Clone)]
 pub struct HealthRepository {
-    pub driver: Arc<DatabaseDriver>,
+    pub driver: DatabaseDriver,
 }
 
 impl HealthRepository {
@@ -15,7 +14,7 @@ impl HealthRepository {
 }
 
 impl HealthRepository {
-    pub fn new(driver: Arc<DatabaseDriver>) -> Self {
+    pub fn new(driver: DatabaseDriver) -> Self {
         Self { driver }
     }
 }

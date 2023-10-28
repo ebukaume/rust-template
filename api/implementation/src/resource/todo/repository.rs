@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use api_documentation::todo::{Todo, TodoModel, TodoModelUpdate};
 use axum::async_trait;
 use chrono::Utc;
@@ -22,7 +20,7 @@ pub trait TodoRepository {
 }
 
 pub struct TodoRepositoryImpl {
-    pub driver: Arc<DatabaseDriver>,
+    pub driver: DatabaseDriver,
 }
 
 #[async_trait]
@@ -130,7 +128,7 @@ impl TodoRepository for TodoRepositoryImpl {
 }
 
 impl TodoRepositoryImpl {
-    pub fn new(driver: Arc<DatabaseDriver>) -> Self {
+    pub fn new(driver: DatabaseDriver) -> Self {
         Self { driver }
     }
 }

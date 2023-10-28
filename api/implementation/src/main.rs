@@ -1,7 +1,8 @@
-use std::{net::SocketAddr, sync::Arc};
+use std::net::SocketAddr;
 
 use axum::{http::Uri, Router, Server};
 use resource::health::controller::HealthController;
+
 use tracing::info;
 
 use crate::{
@@ -20,14 +21,12 @@ async fn main() {
     let _constant = Constant::new();
     let tracing = Tracing::new(&config);
 
-    let database_client = Arc::new(
-        DatabaseDriver::init(&config)
-            .await
-            .expect(&format!("Unable to connect to DB!")),
-    );
+    let database_driver = DatabaseDriver::init(&config)
+        .await
+        .expect(&format!("Unable to connect to DB!"));
 
-    let health_repository = HealthRepository::new(Arc::clone(&database_client));
-    let todo_repository = TodoRepositoryImpl::new(Arc::clone(&database_client));
+    let health_repository = HealthRepository::new(database_driver.clone());
+    let todo_repository = TodoRepositoryImpl::new(database_driver.clone());
 
     let health_service = HealthService::new(health_repository);
     let todo_service = TodoService::new(todo_repository);

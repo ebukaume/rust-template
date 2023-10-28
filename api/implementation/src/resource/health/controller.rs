@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use api_documentation::health::HealthStatusResponse;
 use axum::{extract::State, routing, Router};
-use tokio::sync::Mutex;
 
 use crate::{common::ApplicationError, resource::HealthService};
 
@@ -33,7 +32,7 @@ impl HealthController {
 
     pub fn build(self) -> Router {
         let prefix = self.prefix.expect("prefix not set");
-        let service = Arc::new(Mutex::new(self.service.expect("service not set")));
+        let service = Arc::new(self.service.expect("service not set"));
 
         let router = Router::new()
             .route("/", routing::get(health_status))
@@ -44,11 +43,9 @@ impl HealthController {
 }
 
 async fn health_status(
-    State(service): State<Arc<Mutex<HealthService>>>,
+    State(service): State<Arc<HealthService>>,
 ) -> Result<HealthStatusResponse, ApplicationError> {
     let database_status = service
-        .lock()
-        .await
         .check_service_health()
         .await
         .map_or(String::from("NOK"), |_| String::from("OK"));

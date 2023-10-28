@@ -7,6 +7,7 @@ use tracing::info;
 
 use super::Config;
 
+#[derive(Clone)]
 pub struct DatabaseDriver {
     pub client: Surreal<Client>,
 }
