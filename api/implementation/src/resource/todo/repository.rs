@@ -1,18 +1,12 @@
 use std::sync::Arc;
 
+use api_documentation::todo::{Todo, TodoModel, TodoModelUpdate};
 use axum::async_trait;
 use chrono::Utc;
 use surrealdb::sql::Datetime;
 use ulid::Ulid;
 
-use crate::{
-    common::{DatabaseDriver, RepositoryError},
-    resource::TodoModel,
-};
-
-use api_documentation::entities::todo::database::UpdateTodoRequest;
-
-use super::Todo;
+use crate::common::{DatabaseDriver, RepositoryError};
 
 type RepositoryResult<T> = Result<T, RepositoryError>;
 
@@ -21,11 +15,8 @@ pub trait TodoRepository {
     async fn create_todo(&self, todo: Todo) -> RepositoryResult<Todo>;
     async fn get_todos(&self) -> RepositoryResult<Vec<Todo>>;
     async fn get_todo_by_id(&self, id: &Ulid) -> RepositoryResult<Todo>;
-    async fn update_todo(
-        &self,
-        id: &Ulid,
-        updated_todo: UpdateTodoRequest,
-    ) -> RepositoryResult<Todo>;
+    async fn update_todo(&self, id: &Ulid, updated_todo: TodoModelUpdate)
+        -> RepositoryResult<Todo>;
     async fn delete_todo(&self, id: &Ulid) -> RepositoryResult<Todo>;
     async fn search_todo(&self, q: &str) -> RepositoryResult<Vec<Todo>>;
 }
@@ -102,7 +93,7 @@ impl TodoRepository for TodoRepositoryImpl {
     async fn update_todo(
         &self,
         id: &Ulid,
-        updated_todo: UpdateTodoRequest,
+        updated_todo: TodoModelUpdate,
     ) -> RepositoryResult<Todo> {
         let todo: Option<TodoModel> = self
             .driver
@@ -118,14 +109,18 @@ impl TodoRepository for TodoRepositoryImpl {
         Err(RepositoryError::NotFound(id.to_string()))
     }
 
-    async fn search_todo(&self, q: &str) -> RepositoryResult<Vec<Todo>> {
+    async fn search_todo(&self, search_term: &str) -> RepositoryResult<Vec<Todo>> {
+        let query = r#"
+            SELECT *, search::score(1) * 2 + search::score(2) AS score FROM todo
+            WHERE subject @1@ $search_term OR description @2@ $search_term
+            ORDER BY score DESC
+        "#;
+
         let mut response = self
             .driver
             .client
-            // .query("SELECT search::score(1) AS score FROM todoSearchIndex WHERE subject @1@ $query ORDER BY score DESC")
-            // .query("SELECT * FROM todo WHERE description ~ $query")
-            .query("SELECT * FROM todo WHERE subject @@ 'todo'")
-            .bind(("query", q))
+            .query(query)
+            .bind(("search_term", search_term))
             .await?;
 
         let result: Vec<TodoModel> = response.take(0)?;

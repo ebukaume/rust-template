@@ -10,8 +10,6 @@ use validator::Validate;
 
 use super::ApplicationError;
 
-pub struct ValidatedBody<B>(pub B);
-pub struct ValidatedQuery<Q>(pub Q);
 pub struct ValidatedForm<F>(pub F);
 
 #[async_trait]
@@ -34,6 +32,8 @@ where
     }
 }
 
+pub struct ValidatedQuery<Q>(pub Q);
+
 #[async_trait]
 impl<Q, State> FromRequestParts<State> for ValidatedQuery<Q>
 where
@@ -50,6 +50,8 @@ where
         Ok(ValidatedQuery(query_data))
     }
 }
+
+pub struct ValidatedBody<B>(pub B);
 
 #[async_trait]
 impl<B, State, Body> FromRequest<State, Body> for ValidatedBody<B>

@@ -4,6 +4,7 @@ use ulid::Ulid;
 
 use super::database::TodoModel;
 use super::request::CreateTodoRequest;
+use super::UpdateTodoRequest;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Todo {
@@ -42,6 +43,18 @@ impl Todo {
             due_date: data.due_date,
             created_at: creation_date,
             updated_at: creation_date,
+        }
+    }
+
+    pub fn update_from_request(self, value: UpdateTodoRequest) -> Self {
+        Self {
+            id: self.id,
+            subject: value.subject.unwrap_or(self.subject),
+            description: value.description.unwrap_or(self.description),
+            is_done: value.is_done.unwrap_or(self.is_done),
+            due_date: value.due_date.unwrap_or(self.due_date),
+            created_at: self.created_at,
+            updated_at: self.updated_at,
         }
     }
 }

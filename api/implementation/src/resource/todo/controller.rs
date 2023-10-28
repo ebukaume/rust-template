@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use api_documentation::entities::request::UpdateTodoRequest;
+use api_documentation::todo::{
+    CreateTodoRequest, SearchTodoRequest, TodoResponse, UpdateTodoRequest,
+};
 use axum::{
     extract::{Path, State},
     routing, Json, Router,
@@ -9,10 +11,10 @@ use tokio::sync::Mutex;
 
 use crate::{
     common::{ApplicationError, ValidatedBody, ValidatedQuery},
-    resource::{TodoResponse, TodoService},
+    resource::TodoService,
 };
 
-use super::{CreateTodoRequest, SearchTodo, TodoRepositoryImpl};
+use super::TodoRepositoryImpl;
 
 pub struct TodoController {
     prefix: Option<String>,
@@ -96,16 +98,20 @@ async fn delete_todo(
 async fn update_todo(
     State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
     Path(todo_id): Path<String>,
-    ValidatedBody(data): ValidatedBody<UpdateTodoRequest>,
+    ValidatedBody(update_data): ValidatedBody<UpdateTodoRequest>,
 ) -> Result<TodoResponse, ApplicationError> {
-    let todo = service.lock().await.update_todo(todo_id, data).await?;
+    let todo = service
+        .lock()
+        .await
+        .update_todo(todo_id, update_data)
+        .await?;
 
     Ok(todo.into())
 }
 
 async fn search_todo(
     State(service): State<Arc<Mutex<TodoService<TodoRepositoryImpl>>>>,
-    ValidatedQuery(query): ValidatedQuery<SearchTodo>,
+    ValidatedQuery(query): ValidatedQuery<SearchTodoRequest>,
 ) -> Result<Json<Vec<TodoResponse>>, ApplicationError> {
     let todos = service.lock().await.search_todo(query.q).await?;
 

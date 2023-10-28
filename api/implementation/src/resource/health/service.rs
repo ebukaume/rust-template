@@ -1,7 +1,4 @@
-use crate::{
-    common::{ApplicationError, Check},
-    resource::HealthRepository,
-};
+use crate::{common::ApplicationError, resource::HealthRepository};
 
 pub struct HealthService {
     repository: HealthRepository,

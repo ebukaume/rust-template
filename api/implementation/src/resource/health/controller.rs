@@ -1,12 +1,10 @@
 use std::sync::Arc;
 
+use api_documentation::health::HealthStatusResponse;
 use axum::{extract::State, routing, Router};
 use tokio::sync::Mutex;
 
-use crate::{
-    common::ApplicationError,
-    resource::{HealthService, HealthStatusResponse},
-};
+use crate::{common::ApplicationError, resource::HealthService};
 
 pub struct HealthController {
     prefix: Option<String>,

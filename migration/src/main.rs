@@ -52,13 +52,20 @@ async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), Strin
     let todo_table = r#"
     // DEFINE INDEX todoSearchIndex ON TABLE todo COLUMNS subject SEARCH ANALYZER ascii BM25 HIGHLIGHTS;
     // DEFINE ANALYZER english TOKENIZERS class FILTERS snowball(english);
-    DEFINE ANALYZER english TOKENIZERS class FILTERS snowball(english);
-    DEFINE INDEX todo_index
+    // DEFINE ANALYZER todo_search TOKENIZERS class FILTERS ascii;
+    
+    DEFINE ANALYZER todo_search TOKENIZERS class FILTERS ascii, snowball(english);
+    DEFINE INDEX todo_subject_index
         ON todo FIELDS subject
         SEARCH
-        ANALYZER english
-        BM25(1.2, 0.75)
-        HIGHLIGHTS
+        ANALYZER todo_search
+        BM25(1.2, 0.75);
+
+    DEFINE INDEX todo__description_index
+        ON todo FIELDS description
+        SEARCH
+        ANALYZER todo_search
+        BM25(1.2, 0.75);
     "#;
 
     database_driver

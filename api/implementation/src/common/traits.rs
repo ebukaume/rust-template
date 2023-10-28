@@ -11,3 +11,5 @@ pub trait Query<T> {
 pub trait Check {
     async fn check(&self) -> Result<(), RepositoryError>;
 }
+
+// NOT TRAITS ARE USED YET

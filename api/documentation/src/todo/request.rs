@@ -15,11 +15,18 @@ pub struct CreateTodoRequest {
 }
 
 #[derive(Deserialize, Serialize, Validate, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct UpdateTodoRequest {
     pub subject: Option<String>,
     pub description: Option<String>,
     pub is_done: Option<bool>,
     pub due_date: Option<DateTime<Utc>>,
+}
+
+#[derive(Deserialize, Validate)]
+pub struct SearchTodoRequest {
+    #[validate(length(min = 1, message = "is required!"))]
+    pub q: String,
 }
 
 impl UpdateTodoRequest {
