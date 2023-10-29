@@ -1,9 +1,7 @@
 ## Todo
-
-- Consider integrating https://github.com/marketplace/actions/surrealdb-migrations
+ 
 - Use faker to seed database
-- Add clippy to deps
-- Add system telemetry
+- Use clippy for linting
+- Add system telemetry with open telemetry
 - Add test
-- Add CICD pipeline
-- Add Database migration
+- Add Database migration - Consider integrating https://github.com/marketplace/actions/surrealdb-migrations
