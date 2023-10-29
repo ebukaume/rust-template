@@ -3,3 +3,7 @@ members = ["migration", "seed", "api/documentation", "api/implementation"]
 default-members = ["api/implementation"]
 
 resolver = "2"
+
+[profile.release]
+lto = true
+codegen-units = 1

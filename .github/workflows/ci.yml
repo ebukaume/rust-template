@@ -25,6 +25,9 @@ jobs:
       - name: Run tests
         run: cargo test
 
+      - name: Run Migrations
+        run: cargo run -p migration
+
       - name: Setup fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
 

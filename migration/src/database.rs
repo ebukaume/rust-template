@@ -1,5 +1,5 @@
 use surrealdb::{
-    engine::remote::ws::{Client, Ws},
+    engine::remote::ws::{Client, Wss},
     opt::auth::Root,
     Surreal,
 };
@@ -13,7 +13,7 @@ pub struct DatabaseDriver {
 
 impl DatabaseDriver {
     pub async fn init(config: &Config) -> Result<Self, ()> {
-        let client = Surreal::new::<Ws>(&config.db_url)
+        let client = Surreal::new::<Wss>(&config.db_url)
             .await
             .expect(&format!("Unable to connect to DB!"));
 

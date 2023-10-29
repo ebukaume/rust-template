@@ -45,6 +45,7 @@ async fn create_todo_table(database_driver: &DatabaseDriver) -> Result<(), Strin
         .await
         .map_err(|e| e.to_string())?;
 
+    println!("Created table 'todo'");
     Ok(())
 }
 
@@ -61,7 +62,7 @@ async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), Strin
         ANALYZER todo_search
         BM25(1.2, 0.75);
 
-    DEFINE INDEX todo__description_index
+    DEFINE INDEX todo_description_index
         ON todo FIELDS description
         SEARCH
         ANALYZER todo_search
@@ -74,5 +75,6 @@ async fn create_todo_index(database_driver: &DatabaseDriver) -> Result<(), Strin
         .await
         .map_err(|e| e.to_string())?;
 
+    println!("Created indexes on table 'todo'");
     Ok(())
 }
