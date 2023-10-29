@@ -1,8 +1,12 @@
-use utoipa::OpenApi;
+use utoipa::{OpenApi, ToSchema};
 
 use super::todo;
 use crate::common::error;
 use api_documentation::todo as todo_doc;
+
+// TODO: Find a better way to add date-time schema
+#[derive(ToSchema)]
+struct DateTime(String);
 
 #[derive(OpenApi)]
 #[openapi(
@@ -21,6 +25,7 @@ use api_documentation::todo as todo_doc;
             todo_doc::UpdateTodoRequest,
             todo_doc::SearchTodoRequest,
             error::Problem,
+            self::DateTime,
         )
     ),
     tags(

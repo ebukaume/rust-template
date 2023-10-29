@@ -1,6 +1,9 @@
 use std::net::SocketAddr;
 
-use axum::{http::Uri, Router, Server};
+use axum::{
+    response::{IntoResponse, Redirect},
+    Router, Server,
+};
 use resource::health::controller::HealthController;
 
 use tracing::info;
@@ -63,6 +66,6 @@ async fn main() {
         .expect(&format!("Unable to start server on {}", &addr))
 }
 
-async fn fallback(uri: Uri) -> String {
-    format!("No route for {}\nPlease see the docs", uri)
+async fn fallback() -> impl IntoResponse {
+    Redirect::permanent("/docs")
 }
