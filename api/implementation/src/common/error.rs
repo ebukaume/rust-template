@@ -66,7 +66,7 @@ impl IntoResponse for ApplicationError {
                 let problem = Problem::new("RESOURCE_NOT_FOUND", message);
                 warn!("{:?}", problem);
 
-                return (StatusCode::NOT_FOUND, Json(problem)).into_response();
+                (StatusCode::NOT_FOUND, Json(problem)).into_response()
             }
         }
     }
@@ -101,7 +101,7 @@ impl From<ValidationErrors> for ApplicationError {
         Self::ValidationError(
             value
                 .to_string()
-                .split("\n")
+                .split('\n')
                 .map(ToString::to_string)
                 .collect(),
         )
@@ -113,12 +113,12 @@ impl From<SurrealDBError> for RepositoryError {
         match value {
             SurrealDBError::Db(err) => {
                 dbg!(&err);
-                return RepositoryError::Query(err.to_string());
+                RepositoryError::Query(err.to_string())
             }
             SurrealDBError::Api(err) => {
                 dbg!(&err);
 
-                return RepositoryError::Connection(err.to_string());
+                RepositoryError::Connection(err.to_string())
             }
         }
     }

@@ -27,11 +27,11 @@ mod util;
 async fn main() {
     let config = Config::new();
     let _constant = Constant::new();
-    let tracing = Tracing::new(&config);
+    let tracing = Tracing::init(&config);
 
     let database_driver = DatabaseDriver::init(&config)
         .await
-        .expect(&format!("Unable to connect to DB!"));
+        .expect("Unable to connect to DB!");
 
     let health_repository = HealthRepository::new(database_driver.clone());
     let todo_repository = TodoRepositoryImpl::new(database_driver.clone());
@@ -63,7 +63,7 @@ async fn main() {
     Server::bind(&addr)
         .serve(app.into_make_service())
         .await
-        .expect(&format!("Unable to start server on {}", &addr))
+        .unwrap_or_else(|_| panic!("Unable to start server on {}", &addr))
 }
 
 async fn fallback() -> impl IntoResponse {
