@@ -16,7 +16,7 @@ impl DatabaseDriver {
     pub async fn init(config: &Config) -> Result<Self, ()> {
         let client = Surreal::new::<Wss>(&config.db_url)
             .await
-            .expect(&format!("Unable to connect to DB!"));
+            .expect("Unable to connect to DB!");
 
         info!("Connected to the Database on {}", &config.db_url);
 
@@ -26,7 +26,7 @@ impl DatabaseDriver {
                 password: &config.db_password,
             })
             .await
-            .expect(&format!("Failed to authorize DB access!"));
+            .expect("Failed to authorize DB access!");
 
         info!("Database access granted to {}", &config.db_username);
 
@@ -34,7 +34,7 @@ impl DatabaseDriver {
             .use_ns(&config.db_namespace)
             .use_db(&config.db_name)
             .await
-            .expect(&format!("Unable to config namespace!"));
+            .expect("Unable to config namespace!");
 
         info!(
             "Using {} namespace and {} database",

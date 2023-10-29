@@ -12,6 +12,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install rust v1.73.0
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: "1.73.0"
+          override: true
+          components: rustfmt, clippy
+
+      - name: Lint
+        run: cargo clippy -p api_documentation -p api_implementation
+
       - name: Run tests
         run: cargo test
 

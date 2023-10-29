@@ -1,5 +1,5 @@
 [package]
-name = "api-implementation"
+name = "api_implementation"
 version = "0.1.0"
 edition = "2021"
 authors = ["Ebuka Umeokonkwo"]
@@ -10,7 +10,6 @@ authors = ["Ebuka Umeokonkwo"]
 api_documentation = { path = "../documentation" }
 axum = { version = "0.6.20", features = ["json", "macros"] }
 chrono = "0.4.31"
-clippy = "0.0.302"
 dotenv = "0.15.0"
 envconfig = "0.10.0"
 serde = { version = "1.0.189", features = ["derive"] }

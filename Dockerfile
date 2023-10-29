@@ -25,7 +25,7 @@ WORKDIR /app
 COPY ./ .
 
 RUN cargo build --release
-RUN strip -s /app/target/release/api-implementation
+RUN strip -s /app/target/release/api_implementation
 
 
 ####################################################################################################
@@ -39,9 +39,9 @@ COPY --from=builder /etc/group /etc/group
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/api-implementation ./
+COPY --from=builder /app/target/release/api_implementation ./
 
 # Use an unprivileged user.
 USER apprunner:apprunner
 
-CMD ["/app/api-implementation"]
+CMD ["/app/api_implementation"]

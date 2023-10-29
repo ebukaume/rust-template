@@ -1,4 +1,7 @@
 #!/bin/sh
 
-exec cargo build \
+exec cargo clippy \
+    -p api_documentation \
+    -p api_implementation && \
+    cargo build \
     --release
