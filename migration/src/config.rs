@@ -3,7 +3,6 @@ use std::env;
 #[derive(Debug)]
 pub struct Config {
     pub env: Environment,
-    pub port: u16,
     pub db_url: String,
     pub db_namespace: String,
     pub db_name: String,
@@ -24,12 +23,8 @@ impl Config {
     pub fn new() -> Self {
         dotenv::dotenv().ok();
         Self {
-            port: env::var("PORT")
-                .unwrap_or("4242".into())
-                .parse()
-                .expect("PORT must be a number"),
             env: env::var("ENV")
-                .expect(&error_message("ENV"))
+                .unwrap_or("dev".to_owned())
                 .to_lowercase()
                 .as_str()
                 .into(),
