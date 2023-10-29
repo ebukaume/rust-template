@@ -27,6 +27,12 @@ jobs:
 
       - name: Run Migrations
         run: cargo run -p migration
+        env:
+          SURREALDB_URL: ${{ secrets.SURREALDB_URL }}
+          SURREALDB_NAMESPACE: ${{ secrets.SURREALDB_NAMESPACE }}
+          SURREALDB_DATABASE: ${{ secrets.SURREALDB_DATABASE }}
+          SURREALDB_USERNAME: ${{ secrets.SURREALDB_USERNAME }}
+          SURREALDB_PASSWORD: ${{ secrets.SURREALDB_PASSWORD }}
 
       - name: Setup fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
