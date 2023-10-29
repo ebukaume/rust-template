@@ -142,6 +142,7 @@ pub async fn delete_todo(
 #[utoipa::path(
     patch,
     path = "/todo/{id}",
+    request_body = UpdateTodoRequest,
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
         (status = StatusCode::OK, description = "Update a Todo", body = TodoResponse),

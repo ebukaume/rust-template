@@ -12,9 +12,13 @@ use super::Todo;
 #[derive(Serialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct TodoResponse {
+    #[schema(example = "01HDWDYAF9NWCR985TDBZYCDN8")]
     id: String,
+    #[schema(example = "My first Todo")]
     subject: String,
+    #[schema(example = "Do more today")]
     description: String,
+    #[schema(example = false)]
     is_done: bool,
     due_date: DateTime<Utc>,
     created_at: DateTime<Utc>,

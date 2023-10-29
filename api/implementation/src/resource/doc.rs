@@ -1,11 +1,12 @@
+use chrono::Utc;
 use utoipa::{OpenApi, ToSchema};
 
 use super::todo;
 use crate::common::error;
 use api_documentation::todo as todo_doc;
 
-// TODO: Find a better way to add date-time schema
 #[derive(ToSchema)]
+#[schema(example = Utc::now, format = "date-time")]
 struct DateTime(String);
 
 #[derive(OpenApi)]
