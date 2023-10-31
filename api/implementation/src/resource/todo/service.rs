@@ -1,6 +1,5 @@
 use crate::{common::ApplicationError, resource::TodoRepository, util::validate_ulid};
 
-use super::TodoRepositoryImpl;
 use api_documentation::todo::{CreateTodoRequest, Todo, TodoModelUpdate, UpdateTodoRequest};
 
 type ServeiceResult<T> = Result<T, ApplicationError>;
@@ -12,8 +11,11 @@ where
     repository: T,
 }
 
-impl TodoService<TodoRepositoryImpl> {
-    pub fn new(repository: TodoRepositoryImpl) -> Self {
+impl<T> TodoService<T>
+where
+    T: TodoRepository,
+{
+    pub fn new(repository: T) -> Self {
         Self { repository }
     }
 
