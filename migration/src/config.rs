@@ -21,7 +21,7 @@ static MESSAGE_PREFIX: &str = "is required env variable!";
 
 impl Config {
     pub fn new() -> Self {
-        dotenv::dotenv().ok();
+        dotenvy::dotenv().ok();
         Self {
             env: env::var("ENV")
                 .unwrap_or("dev".to_owned())

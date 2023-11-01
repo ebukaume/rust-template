@@ -30,7 +30,7 @@ static MESSAGE_PREFIX: &str = "is required env variable!";
 
 impl Config {
     pub fn new() -> Self {
-        dotenv::dotenv().ok();
+        dotenvy::dotenv().ok();
         let app = Application {
             name: env::var("APP_NAME").unwrap_or_else(|_| panic!("{}", error_message("APP_NAME"))),
             version: env::var("APP_VERSION")
