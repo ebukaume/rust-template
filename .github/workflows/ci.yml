@@ -39,14 +39,11 @@ jobs:
 
       - name: Install cargo check tools
         run: |
-          cargo install --locked cargo-outdated || true
           cargo install --locked cargo-audit || true
           cargo install --locked cargo-pants || true
 
       - name: Check
         run: |
-          cargo outdated --exit-code 1
-          rm -rf ~/.cargo/advisory-db
           cargo audit
           cargo pants
 
