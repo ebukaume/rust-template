@@ -1,9 +1,11 @@
 use std::sync::Arc;
 
-use api_documentation::health::HealthStatusResponse;
+use api_documentation::v1::health::HealthStatusResponse;
 use axum::{extract::State, routing, Router};
 
-use crate::{common::ApplicationError, resource::HealthService};
+use crate::common::ApplicationError;
+
+use super::service::HealthService;
 
 pub struct HealthController {
     prefix: Option<String>,

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use api_documentation::todo::{
+use api_documentation::v1::todo::{
     CreateTodoRequest, SearchTodoRequest, TodoResponse, UpdateTodoRequest,
 };
 use axum::{
@@ -8,12 +8,9 @@ use axum::{
     routing, Json, Router,
 };
 
-use crate::{
-    common::{ApplicationError, ValidatedBody, ValidatedQuery},
-    resource::TodoService,
-};
+use crate::common::{ApplicationError, ValidatedBody, ValidatedQuery};
 
-use super::TodoRepositoryImpl;
+use super::{TodoRepositoryImpl, TodoService};
 
 pub static TODO_TAG: &str = "Todo";
 

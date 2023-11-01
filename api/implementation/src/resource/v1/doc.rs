@@ -3,7 +3,7 @@ use utoipa::{OpenApi, ToSchema};
 
 use super::todo;
 use crate::common::error;
-use api_documentation::todo as todo_doc;
+use api_documentation::v1::todo as todo_doc;
 
 #[derive(ToSchema)]
 #[schema(example = Utc::now, format = "date-time")]

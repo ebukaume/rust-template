@@ -1,4 +1,4 @@
-use api_documentation::todo::{Todo, TodoModel, TodoModelUpdate};
+use api_documentation::v1::todo::{Todo, TodoModel, TodoModelUpdate};
 use axum::async_trait;
 use chrono::Utc;
 use surrealdb::sql::Datetime;

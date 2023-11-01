@@ -4,7 +4,7 @@ use axum::{
     response::{IntoResponse, Redirect},
     Router, Server,
 };
-use resource::health::controller::HealthController;
+use resource::v1::health::controller::HealthController;
 
 use tracing::info;
 use utoipa::OpenApi;
@@ -12,9 +12,8 @@ use utoipa_rapidoc::RapiDoc;
 
 use crate::{
     common::{Config, Constant, DatabaseDriver},
-    resource::{
-        doc::ApiDoc, HealthRepository, HealthService, TodoController, TodoRepositoryImpl,
-        TodoService,
+    resource::v1::{
+        ApiDoc, HealthRepository, HealthService, TodoController, TodoRepositoryImpl, TodoService,
     },
     util::Tracing,
 };
@@ -39,20 +38,25 @@ async fn main() {
     let health_service = HealthService::new(health_repository);
     let todo_service = TodoService::new(todo_repository);
 
+    let v1_prefix = "/v1";
+
     let health_controller = HealthController::new()
-        .with_prefix("/health")
+        .with_prefix(&format!("{}/health", &v1_prefix))
         .with_service(health_service)
         .build();
 
     let todo_controller = TodoController::new()
-        .with_prefix("/todo")
+        .with_prefix(&format!("{}/todo", &v1_prefix))
         .with_service(todo_service)
         .build();
 
     let app = Router::new()
         .merge(health_controller)
         .merge(todo_controller)
-        .merge(RapiDoc::with_openapi("/docs.json", ApiDoc::openapi()).path("/docs"))
+        .merge(
+            RapiDoc::with_openapi(&format!("{}/docs.json", &v1_prefix), ApiDoc::openapi())
+                .path(&format!("{}/docs", &v1_prefix)),
+        )
         .layer(tracing)
         .fallback(fallback);
 
@@ -67,5 +71,6 @@ async fn main() {
 }
 
 async fn fallback() -> impl IntoResponse {
-    Redirect::permanent("/docs")
+    //
+    Redirect::permanent("/v1/docs")
 }

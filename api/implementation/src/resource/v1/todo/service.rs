@@ -1,6 +1,8 @@
-use crate::{common::ApplicationError, resource::TodoRepository, util::validate_ulid};
+use crate::{common::ApplicationError, util::validate_ulid};
 
-use api_documentation::todo::{CreateTodoRequest, Todo, TodoModelUpdate, UpdateTodoRequest};
+use api_documentation::v1::todo::{CreateTodoRequest, Todo, TodoModelUpdate, UpdateTodoRequest};
+
+use super::TodoRepository;
 
 type ServeiceResult<T> = Result<T, ApplicationError>;
 
