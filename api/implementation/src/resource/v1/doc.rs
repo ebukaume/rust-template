@@ -36,7 +36,7 @@ struct DateTime(String);
         title = "Axum REST API template",
         description = "A simple REST API template",
         version = "v0.1.0",
-        contact(name = "Ebuka Umeokonkwo", email = "ebukaume@gmail.com", url = "http://github.com/ebukaume"),
+        contact(name = "Ebuka Umeokonkwo", email = "ebukaume@gmail.com", url = "https://github.com/ebukaume/rust-template"),
         license( name = "MIT", url = "https://opensource.org/license/mit" )
     )
 )]
