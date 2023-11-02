@@ -1,47 +1,26 @@
 #Ref - https://kerkour.com/rust-small-docker-image
 
-####################################################################################################
-## Builder
-####################################################################################################
-FROM rust:latest AS builder
+FROM rust:1.73.0 AS builder
 
 RUN update-ca-certificates
 
-ENV USER=apprunner
-ENV UID=10001
-
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
-
-
 WORKDIR /app
 
-COPY ./ .
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    cargo install cargo-strip
 
-RUN cargo build --release
-RUN strip -s /app/target/release/api_implementation
+COPY . .
+
+RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/app/target \
+    cargo build --release && \
+    cargo strip && \
+    mv /app/target/release/api_implementation /app
 
 
-####################################################################################################
-## Final image
-####################################################################################################
 FROM debian:bookworm-slim
 
-# Import from builder.
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
+COPY --from=builder /app/api_implementation /
 
-WORKDIR /app
+ENTRYPOINT ["./api_implementation"]
 
-COPY --from=builder /app/target/release/api_implementation ./
-
-# Use an unprivileged user.
-USER apprunner:apprunner
-
-CMD ["/app/api_implementation"]
+EXPOSE 4242
