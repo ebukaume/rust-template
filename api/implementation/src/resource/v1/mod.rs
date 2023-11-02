@@ -1,7 +1,7 @@
 pub mod doc;
 pub mod health;
-pub mod todo;
+pub mod todos;
 
 pub use doc::*;
 pub use health::*;
-pub use todo::*;
+pub use todos::*;

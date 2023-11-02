@@ -1,6 +1,6 @@
 use crate::{common::ApplicationError, util::validate_ulid};
 
-use api_documentation::v1::todo::{CreateTodoRequest, Todo, TodoModelUpdate, UpdateTodoRequest};
+use api_documentation::v1::todos::{CreateTodoRequest, Todo, TodoModelUpdate, UpdateTodoRequest};
 
 use super::TodoRepository;
 

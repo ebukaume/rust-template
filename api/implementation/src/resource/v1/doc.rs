@@ -1,9 +1,9 @@
 use chrono::Utc;
 use utoipa::{OpenApi, ToSchema};
 
-use super::todo;
+use super::todos;
 use crate::common::error;
-use api_documentation::v1::todo as todo_doc;
+use api_documentation::v1::todos as todo_doc;
 
 #[derive(ToSchema)]
 #[schema(example = Utc::now, format = "date-time")]
@@ -12,12 +12,12 @@ struct DateTime(String);
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        todo::create_todo,
-        todo::get_todos,
-        todo::get_todo_by_id,
-        todo::update_todo,
-        todo::delete_todo,
-        todo::search_todo
+        todos::create_todo,
+        todos::get_todos,
+        todos::get_todo_by_id,
+        todos::update_todo,
+        todos::delete_todo,
+        todos::search_todo
     ),
     components(
         schemas(

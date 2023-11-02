@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use api_documentation::v1::todo::{
+use api_documentation::v1::todos::{
     CreateTodoRequest, SearchTodoRequest, TodoResponse, UpdateTodoRequest,
 };
 use axum::{
@@ -13,6 +13,7 @@ use crate::common::{ApplicationError, ValidatedBody, ValidatedQuery};
 use super::{TodoRepositoryImpl, TodoService};
 
 pub static TODO_TAG: &str = "Todo";
+static VERSION_PREFIX: &str = "/v1";
 
 pub struct TodoController {
     prefix: Option<String>,
@@ -58,7 +59,7 @@ impl TodoController {
 
 #[utoipa::path(
     get,
-    path = "/todo",
+    path = format!("{}/todos", VERSION_PREFIX),
     responses(
         (status = StatusCode::OK, description = "Get all Todos", body = [TodoResponse]),
         (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
@@ -78,7 +79,7 @@ pub async fn get_todos(
 
 #[utoipa::path(
     get,
-    path = "/todo/{id}",
+    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
         (status = StatusCode::OK, description = "Get Todo by Id", body = TodoResponse),
@@ -98,7 +99,7 @@ pub async fn get_todo_by_id(
 
 #[utoipa::path(
     post,
-    path = "/todo",
+    path = format!("{}/todos", VERSION_PREFIX),
     request_body = CreateTodoRequest,
     responses(
         (status = StatusCode::OK, description = "Create Todos", body = TodoResponse),
@@ -118,7 +119,7 @@ pub async fn create_todo(
 
 #[utoipa::path(
     delete,
-    path = "/todo{id}",
+    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
         (status = StatusCode::OK, description = "Delete Todo by Id", body = TodoResponse),
@@ -138,7 +139,7 @@ pub async fn delete_todo(
 
 #[utoipa::path(
     patch,
-    path = "/todo/{id}",
+    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
     request_body = UpdateTodoRequest,
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
@@ -160,7 +161,7 @@ pub async fn update_todo(
 
 #[utoipa::path(
     get,
-    path = "/todo/search",
+    path = format!("{}/todos/search", VERSION_PREFIX),
     params(SearchTodoRequest),
     responses(
         (status = StatusCode::OK, description = "Search for Todos based on subject adn description fields", body = [TodoResponse]),

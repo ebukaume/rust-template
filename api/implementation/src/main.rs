@@ -46,7 +46,7 @@ async fn main() {
         .build();
 
     let todo_controller = TodoController::new()
-        .with_prefix(&format!("{}/todo", &v1_prefix))
+        .with_prefix(&format!("{}/todos", &v1_prefix))
         .with_service(todo_service)
         .build();
 
