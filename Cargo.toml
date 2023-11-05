@@ -1,6 +1,6 @@
 [workspace]
-members = ["migration", "seed", "api/documentation", "api/implementation"]
-default-members = ["api/implementation"]
+members = ["app", "migration", "seed", "server"]
+default-members = ["server"]
 
 resolver = "2"
 

@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  surrealdb:
+    env_file:
+      - .env
+    entrypoint:
+      - /surreal
+      - start
+      - --user
+      - $SURREALDB_USERNAME
+      - --pass
+      - $SURREALDB_PASSWORD
+      - memory
+      - --bind
+      - "0.0.0.0:8000"
+    image: surrealdb/surrealdb:latest
+    ports:
+      - 8000:8000

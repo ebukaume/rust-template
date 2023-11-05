@@ -95,28 +95,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ea50b14b7a4b9343f8c627a7a53c52076482bd4bdad0a24fd3ec533ed616cc2c"
 
 [[package]]
-name = "api_documentation"
+name = "app"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "axum-test-helper",
  "chrono",
- "mockall",
- "serde",
- "serde_json",
- "surrealdb",
- "ulid",
- "utoipa",
- "utoipa-rapidoc",
- "validator",
-]
-
-[[package]]
-name = "api_implementation"
-version = "0.1.0"
-dependencies = [
- "api_documentation",
- "axum",
- "chrono",
+ "clocks",
  "dotenvy",
  "envconfig",
  "mockall",
@@ -339,6 +324,24 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.38",
+]
+
+[[package]]
+name = "axum-test-helper"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "298f62fa902c2515c169ab0bfb56c593229f33faa01131215d58e3d4898e3aa9"
+dependencies = [
+ "axum",
+ "bytes",
+ "http",
+ "http-body",
+ "hyper",
+ "reqwest",
+ "serde",
+ "tokio",
+ "tower",
+ "tower-service",
 ]
 
 [[package]]
@@ -671,6 +674,18 @@ checksum = "773f3b9af64447d2ce9850330c473515014aa235e6a783b02db81ff39e4a3dad"
 dependencies = [
  "crypto-common",
  "inout",
+]
+
+[[package]]
+name = "clocks"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9d4a519e1c1b1fc949449a255f7fa072e3ba1c6d1da6820c844b8114cd9c5fc"
+dependencies = [
+ "chrono",
+ "either",
+ "priq",
+ "tokio",
 ]
 
 [[package]]
@@ -2153,6 +2168,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "priq"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2a342307c9f3b94f34b368c1601ed40ce4c64184555a1a9473e7308d1bcf4159"
+dependencies = [
+ "rand",
+]
+
+[[package]]
 name = "proc-macro-crate"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2842,6 +2866,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.38",
+]
+
+[[package]]
+name = "server"
+version = "0.1.0"
+dependencies = [
+ "app",
+ "axum",
+ "clocks",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

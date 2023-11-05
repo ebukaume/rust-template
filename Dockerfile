@@ -14,13 +14,13 @@ COPY . .
 RUN --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/app/target \
     cargo build --release && \
     cargo strip && \
-    mv /app/target/release/api_implementation /app
+    mv /app/target/release/server /app/server
 
 
 FROM debian:bookworm-slim
 
-COPY --from=builder /app/api_implementation /
+COPY --from=builder /app/server .
 
-ENTRYPOINT ["./api_implementation"]
+ENTRYPOINT ["./server"]
 
 EXPOSE 4242
