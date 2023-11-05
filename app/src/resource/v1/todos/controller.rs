@@ -15,7 +15,6 @@ use crate::{
 use super::{TodoRepository, TodoService};
 
 pub static TODO_TAG: &str = "Todo";
-static VERSION_PREFIX: &str = "/v1";
 
 pub struct TodoController<R: TodoRepository, C: Clock, G: IdGenerator<Ulid>> {
     prefix: Option<String>,
@@ -67,7 +66,7 @@ impl<R: TodoRepository, C: Clock, G: IdGenerator<Ulid>> TodoController<R, C, G> 
 
 #[utoipa::path(
     get,
-    path = format!("{}/todos", VERSION_PREFIX),
+    path = "/v1/todos",
     responses(
         (status = StatusCode::OK, description = "Get all Todos", body = [TodoResponse]),
         (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
@@ -92,7 +91,7 @@ where
 
 #[utoipa::path(
     get,
-    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
+    path = "/v1/todos/{id}",
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
         (status = StatusCode::OK, description = "Get Todo by Id", body = TodoResponse),
@@ -117,7 +116,7 @@ where
 
 #[utoipa::path(
     post,
-    path = format!("{}/todos", VERSION_PREFIX),
+    path = "/v1/todos",
     request_body = CreateTodoRequest,
     responses(
         (status = StatusCode::OK, description = "Create Todos", body = TodoResponse),
@@ -142,7 +141,7 @@ where
 
 #[utoipa::path(
     delete,
-    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
+    path = "/v1/todos/{id}",
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
     responses(
         (status = StatusCode::OK, description = "Delete Todo by Id", body = TodoResponse),
@@ -167,9 +166,9 @@ where
 
 #[utoipa::path(
     patch,
-    path = format!("{}/todos/{}", VERSION_PREFIX, "id"),
-    request_body = UpdateTodoRequest,
+    path = "/v1/todos/{id}",
     params(("id", Path, example = "01HDS25AGAJ88WNXE5KZ3CN8KG")),
+    request_body = UpdateTodoRequest,
     responses(
         (status = StatusCode::OK, description = "Update a Todo", body = TodoResponse),
         (status = StatusCode::NOT_FOUND, description = "Resource not found", body = Problem),
@@ -194,7 +193,7 @@ where
 
 #[utoipa::path(
     get,
-    path = format!("{}/todos/search", VERSION_PREFIX),
+    path = "/v1/todos/search",
     params(SearchTodoRequest),
     responses(
         (status = StatusCode::OK, description = "Search for Todos based on subject adn description fields", body = [TodoResponse]),
