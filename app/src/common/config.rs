@@ -28,6 +28,12 @@ pub struct Config {
 
 static MESSAGE_PREFIX: &str = "is required env variable!";
 
+impl Default for Config {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Config {
     pub fn new() -> Self {
         dotenvy::dotenv().ok();

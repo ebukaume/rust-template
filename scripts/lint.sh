@@ -1,5 +1,12 @@
 #!/bin/sh
 
 exec cargo clippy \
-    -p docs \
-    -p app
+    --fix \
+    --allow-dirty \
+    -p server \
+    -p app \
+    -p migration \
+    -p seed
+    -- \
+    --no-deps
+    -D warnings \

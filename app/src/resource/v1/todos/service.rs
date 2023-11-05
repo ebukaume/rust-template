@@ -54,7 +54,7 @@ where
 
         let todo = self.repository.get_todo_by_id(&id).await?;
 
-        Ok(self.model_to_domain(todo)?)
+        self.model_to_domain(todo)
     }
 
     pub async fn create_todo(&self, todo: CreateTodoRequest) -> ServeiceResult<Todo> {
@@ -62,7 +62,7 @@ where
 
         let todo = self.repository.create_todo(todo).await?;
 
-        Ok(self.model_to_domain(todo)?)
+        self.model_to_domain(todo)
     }
 
     pub async fn update_todo(&self, id: &str, update: UpdateTodoRequest) -> ServeiceResult<Todo> {
@@ -72,7 +72,7 @@ where
 
         let todo = self.repository.update_todo(&id, updated_todo).await?;
 
-        Ok(self.model_to_domain(todo)?)
+        self.model_to_domain(todo)
     }
 
     pub async fn delete_todo(&self, id: &str) -> ServeiceResult<Todo> {
@@ -80,7 +80,7 @@ where
 
         let todo = self.repository.delete_todo(&id).await?;
 
-        Ok(self.model_to_domain(todo)?)
+        self.model_to_domain(todo)
     }
 
     pub async fn search_todo(&self, q: &str) -> ServeiceResult<Vec<Todo>> {
@@ -106,8 +106,8 @@ where
             description: data.description,
             is_done: false,
             due_date: data.due_date,
-            created_at: creation_date.into(),
-            updated_at: creation_date.into(),
+            created_at: creation_date,
+            updated_at: creation_date,
         }
     }
 

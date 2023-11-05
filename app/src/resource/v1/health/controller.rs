@@ -10,6 +10,11 @@ pub struct HealthController {
     prefix: Option<String>,
     service: Option<HealthService>,
 }
+impl Default for HealthController {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl HealthController {
     pub fn new() -> Self {

@@ -63,7 +63,7 @@ mod create_todo {
             response_body.description,
             "Buy groceries from the supermarket for the weekend."
         );
-        assert_eq!(response_body.is_done, false);
+        assert!(!response_body.is_done);
         assert_eq!(response_body.due_date, clock.now());
         assert_eq!(response_body.created_at, clock.now());
     }
@@ -122,7 +122,7 @@ mod get_todo_by_id {
         assert_eq!(response_body.id, id.to_string());
         assert_eq!(response_body.subject, "Dummy subject");
         assert_eq!(response_body.description, "Dummy description");
-        assert_eq!(response_body.is_done, false);
+        assert!(!response_body.is_done);
         assert_eq!(response_body.due_date, clock.now());
         assert_eq!(response_body.created_at, clock.now());
     }
@@ -147,7 +147,7 @@ mod get_todos {
         let response_body: Vec<TodoResponse> = res.json().await;
 
         assert_eq!(response_status, StatusCode::OK);
-        assert!(response_body.len() > 0);
+        assert!(!response_body.is_empty());
     }
 }
 
@@ -237,7 +237,7 @@ mod update_todo_by_id {
         assert_eq!(response_body.id, id.to_string());
         assert_eq!(response_body.subject, "Updated subject".to_string());
         assert_eq!(response_body.description, "Updated description".to_string());
-        assert_eq!(response_body.is_done, true);
+        assert!(response_body.is_done);
         assert_eq!(response_body.due_date, clock.now());
         assert_eq!(response_body.created_at, clock.now());
     }
@@ -289,7 +289,7 @@ mod delete_todo_by_id {
         assert_eq!(response_body.id, id.to_string());
         assert_eq!(response_body.subject, "Dummy subject".to_string());
         assert_eq!(response_body.description, "Dummy description".to_string());
-        assert_eq!(response_body.is_done, false);
+        assert!(!response_body.is_done);
         assert_eq!(response_body.due_date, clock.now());
         assert_eq!(response_body.created_at, clock.now());
     }
@@ -347,7 +347,7 @@ mod search_todos {
         let response_body: Vec<TodoResponse> = res.json().await;
 
         assert_eq!(response_status, StatusCode::OK);
-        assert!(response_body.len() > 0);
+        assert!(!response_body.is_empty());
     }
 }
 

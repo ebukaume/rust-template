@@ -9,3 +9,9 @@ impl Constant {
         }
     }
 }
+
+impl Default for Constant {
+    fn default() -> Self {
+        Self::new()
+    }
+}

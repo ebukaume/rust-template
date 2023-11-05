@@ -9,7 +9,7 @@ async fn main() {
     let config = Config::new();
     let database_driver = DatabaseDriver::init(&config)
         .await
-        .expect(&format!("Unable to connect to DB!"));
+        .expect("Unable to connect to DB!");
 
     if let Err(err) = create_todo_table(&database_driver).await {
         println!("{}", err);

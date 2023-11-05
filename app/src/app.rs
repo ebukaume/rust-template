@@ -21,6 +21,12 @@ pub struct AppBuilder<C: Clock, G: IdGenerator<Ulid>> {
     id_generator: Option<G>,
 }
 
+impl<C: Clock + Clone, G: IdGenerator<Ulid> + Clone> Default for AppBuilder<C, G> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<C: Clock + Clone, G: IdGenerator<Ulid> + Clone> AppBuilder<C, G> {
     pub fn new() -> Self {
         AppBuilder {
@@ -110,11 +116,11 @@ impl<C: Clock + Clone, G: IdGenerator<Ulid> + Clone> AppBuilder<C, G> {
                 .layer(telemetry)
                 .fallback(Redirect::permanent("/v1/docs"));
 
-            return Ok(app);
+            Ok(app)
         } else {
             let app = app.fallback(Redirect::permanent("/v1/docs"));
 
-            return Ok(app);
-        };
+            Ok(app)
+        }
     }
 }

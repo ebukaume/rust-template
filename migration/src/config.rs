@@ -28,14 +28,14 @@ impl Config {
                 .to_lowercase()
                 .as_str()
                 .into(),
-            db_url: env::var("SURREALDB_URL").expect(&error_message("SURREALDB_URL")),
+            db_url: env::var("SURREALDB_URL").unwrap_or_else(|_| { panic!("{}", error_message("SURREALDB_URL")) }),
             db_namespace: env::var("SURREALDB_NAMESPACE")
-                .expect(&error_message("SURREALDB_NAMESPACE")),
-            db_name: env::var("SURREALDB_DATABASE").expect(&error_message("SURREALDB_DATABASE")),
+                .unwrap_or_else(|_| { panic!("{}", error_message("SURREALDB_NAMESPACE")) }),
+            db_name: env::var("SURREALDB_DATABASE").unwrap_or_else(|_| { panic!("{}", error_message("SURREALDB_DATABASE")) }),
             db_username: env::var("SURREALDB_USERNAME")
-                .expect(&error_message("SURREALDB_USERNAME")),
+                .unwrap_or_else(|_| { panic!("{}", error_message("SURREALDB_USERNAME")) }),
             db_password: env::var("SURREALDB_PASSWORD")
-                .expect(&error_message("SURREALDB_PASSWORD")),
+                .unwrap_or_else(|_| { panic!("{}", error_message("SURREALDB_PASSWORD")) }),
         }
     }
 }

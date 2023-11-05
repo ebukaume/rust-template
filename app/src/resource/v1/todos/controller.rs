@@ -22,6 +22,12 @@ pub struct TodoController<R: TodoRepository, C: Clock, G: IdGenerator<Ulid>> {
     service: Option<TodoService<R, C, G>>,
 }
 
+impl<R: TodoRepository, C: Clock, G: IdGenerator<Ulid>> Default for TodoController<R, C, G> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<R: TodoRepository, C: Clock, G: IdGenerator<Ulid>> TodoController<R, C, G> {
     pub fn new() -> Self {
         Self {

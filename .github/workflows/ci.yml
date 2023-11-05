@@ -50,7 +50,15 @@ jobs:
       - name: Run tests
         run: cargo test
 
+      - name: Check if new migration changes
+        id: migration-changes
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            migrations/**/*.rs
+
       - name: Run Migrations
+        if: steps.migration-changes.outputs.test_any_changed == 'true'
         run: cargo run -p migration
         env:
           SURREALDB_URL: ${{ secrets.SURREALDB_URL }}

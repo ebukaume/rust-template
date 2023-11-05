@@ -23,6 +23,12 @@ impl UlidGenerator {
     }
 }
 
+impl Default for UlidGenerator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl IdGenerator<Ulid> for UlidGenerator {
     fn generate(&self) -> Ulid {
         Ulid::new()
