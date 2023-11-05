@@ -15,7 +15,7 @@ impl MockClock {
 impl Clock for MockClock {
     fn now(&self) -> DateTime<Utc> {
         DateTime::parse_from_rfc3339(&self.time)
-            .unwrap()
+            .unwrap_or_else(|_| panic!("Unable to init MockClock"))
             .with_timezone(&Utc)
     }
 }

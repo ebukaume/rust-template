@@ -34,7 +34,9 @@ where
 {
     let config = Config::new();
 
-    let database_driver = DatabaseDriver::init(&config).await.unwrap();
+    let database_driver = DatabaseDriver::init(&config)
+        .await
+        .unwrap_or_else(|_| panic!("Unable to init database driver"));
 
     let app = AppBuilder::new()
         .clock(clock)
@@ -43,7 +45,7 @@ where
         .id_generator(id_generator)
         .build()
         .await
-        .unwrap();
+        .unwrap_or_else(|_| panic!("Unable to build App"));
 
     TestClient::new(app)
 }

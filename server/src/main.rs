@@ -24,7 +24,7 @@ async fn main() {
         .id_generator(id_generator)
         .build()
         .await
-        .unwrap();
+        .unwrap_or_else(|_| panic!("Unable to build App"));
 
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], config.port));
 

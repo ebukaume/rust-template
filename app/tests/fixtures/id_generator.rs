@@ -11,7 +11,8 @@ pub struct MockUlidGenerator {
 impl MockUlidGenerator {
     pub fn with_fixed_value(value: &str) -> Self {
         MockUlidGenerator {
-            value: Ulid::from_string(value).unwrap(),
+            value: Ulid::from_string(value)
+                .unwrap_or_else(|_| panic!("Unable to init MockUlidGenerator")),
         }
     }
 }
