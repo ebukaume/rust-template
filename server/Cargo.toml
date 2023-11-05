@@ -9,8 +9,6 @@ edition = "2021"
 app = { path = "../app" }
 
 axum = { version = "0.6.20", features = ["json", "macros"] }
-clocks = "0.0.1"
 tokio = { version = "1.33.0", features = ["macros", "full"] }
-
 tracing = "0.1.40"
 tracing-subscriber = "0.3.17"
