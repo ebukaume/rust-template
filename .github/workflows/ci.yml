@@ -35,7 +35,7 @@ jobs:
       - name: Lint
         run: |
           cargo fmt --all -- --check
-          cargo clippy -p docs -p app -- --no-deps -D warnings
+          ./script/lint.sh
 
       - name: Install cargo check tools
         run: |
