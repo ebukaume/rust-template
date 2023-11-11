@@ -8,7 +8,7 @@ use ulid::Ulid;
 
 use super::TodoRepository;
 
-type ServeiceResult<T> = Result<T, ApplicationError>;
+type ServiceResult<T> = Result<T, ApplicationError>;
 
 pub struct TodoService<R, C, G>
 where
@@ -35,21 +35,21 @@ where
         }
     }
 
-    pub async fn get_todos(&self) -> ServeiceResult<Vec<Todo>> {
+    pub async fn get_todos(&self) -> ServiceResult<Vec<Todo>> {
         let todos_model = self.repository.get_todos().await?;
 
-        let reasult: Result<Vec<Todo>, ApplicationError> = todos_model
+        let result: Result<Vec<Todo>, ApplicationError> = todos_model
             .into_iter()
             .map(|t| self.model_to_domain(t))
             .collect();
 
-        match reasult {
+        match result {
             Ok(todos) => Ok(todos),
             Err(msg) => Err(msg),
         }
     }
 
-    pub async fn get_todo_by_id(&self, id: &str) -> ServeiceResult<Todo> {
+    pub async fn get_todo_by_id(&self, id: &str) -> ServiceResult<Todo> {
         let id = self.id_generator.parse(id)?;
 
         let todo = self.repository.get_todo_by_id(&id).await?;
@@ -57,7 +57,7 @@ where
         self.model_to_domain(todo)
     }
 
-    pub async fn create_todo(&self, todo: CreateTodoRequest) -> ServeiceResult<Todo> {
+    pub async fn create_todo(&self, todo: CreateTodoRequest) -> ServiceResult<Todo> {
         let todo = self.request_to_domain(todo);
 
         let todo = self.repository.create_todo(todo).await?;
@@ -65,7 +65,7 @@ where
         self.model_to_domain(todo)
     }
 
-    pub async fn update_todo(&self, id: &str, update: UpdateTodoRequest) -> ServeiceResult<Todo> {
+    pub async fn update_todo(&self, id: &str, update: UpdateTodoRequest) -> ServiceResult<Todo> {
         let id = self.id_generator.parse(id)?;
         let existing_todo = self.repository.get_todo_by_id(&id).await?;
         let updated_todo = TodoModelUpdate::merge(existing_todo, update);
@@ -75,7 +75,7 @@ where
         self.model_to_domain(todo)
     }
 
-    pub async fn delete_todo(&self, id: &str) -> ServeiceResult<Todo> {
+    pub async fn delete_todo(&self, id: &str) -> ServiceResult<Todo> {
         let id = self.id_generator.parse(id)?;
 
         let todo = self.repository.delete_todo(&id).await?;
@@ -83,15 +83,15 @@ where
         self.model_to_domain(todo)
     }
 
-    pub async fn search_todo(&self, q: &str) -> ServeiceResult<Vec<Todo>> {
+    pub async fn search_todo(&self, q: &str) -> ServiceResult<Vec<Todo>> {
         let todos_model = self.repository.search_todo(q).await?;
 
-        let reasult: Result<Vec<Todo>, ApplicationError> = todos_model
+        let result: Result<Vec<Todo>, ApplicationError> = todos_model
             .into_iter()
             .map(|t| self.model_to_domain(t))
             .collect();
 
-        match reasult {
+        match result {
             Ok(todos) => Ok(todos),
             Err(msg) => Err(msg),
         }

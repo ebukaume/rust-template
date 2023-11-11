@@ -29,7 +29,7 @@ struct DateTime(String);
         )
     ),
     tags(
-        (name = "Todo", description = "Endpoints for manupilating todo resource")
+        (name = "Todo", description = "Endpoints for manipulating todo resource")
     ),
     info(
         title = "Axum REST API template",
